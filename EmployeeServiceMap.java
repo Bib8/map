@@ -1,7 +1,7 @@
 package com.example.map;
 
 import org.springframework.stereotype.Service;
-
+import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 //сервис мапов!!!!!!!
 @Service
@@ -10,11 +10,11 @@ public class EmployeeServiceMap implements EmployeeMapInterface{
     private final Map<String, Employee> employeesMap = new HashMap<>();
 
     @Override
-    public Employee addToRepositoryEmployee(String firstname, String lastname) throws NotFoundAnyMatchException {
+    public Employee addToRepositoryEmployee(String firstname, String lastname) {
         Employee addEmpoyee = new Employee(firstname, lastname);
         String key = firstname + lastname;
-        if (!employeesMap.containsKey(firstname + lastname)) {
-            throw new NotFoundAnyMatchException("Error - not found");
+        if (StringUtils.isEmpty(key)) {
+            throw new NullPointerException("error");
         }
         employeesMap.put(key, addEmpoyee);
         return  addEmpoyee;
@@ -23,7 +23,9 @@ public class EmployeeServiceMap implements EmployeeMapInterface{
     @Override
     public Employee removeFromRepositoryEmployee(String firstname, String lastname) throws NotFoundAnyMatchException {
         String key = firstname + lastname;
-        if (!employeesMap.containsKey(firstname + lastname)) {
+        if (StringUtils.isEmpty(key)) {
+            throw new NullPointerException("error");
+        }else if (!StringUtils.containsOnly(key)) {
             throw new NotFoundAnyMatchException("Error - not found");
         }
         return employeesMap.remove(key);
@@ -33,7 +35,7 @@ public class EmployeeServiceMap implements EmployeeMapInterface{
     public Employee findEmployeeInRepository(String firstname, String lastname) throws NotFoundAnyMatchException {
 
         String key = firstname + lastname;
-        if (!employeesMap.containsKey(key)) {
+        if (!StringUtils.containsOnly(key)) {
             throw new NotFoundAnyMatchException("Error - not found");
         }
         return employeesMap.get(key);
