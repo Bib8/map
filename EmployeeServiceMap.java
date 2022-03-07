@@ -1,7 +1,9 @@
 package com.example.map;
 
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
+import org.springframework.util.NumberUtils;
+
 import java.util.*;
 //сервис мапов!!!!!!!
 @Service
@@ -13,7 +15,8 @@ public class EmployeeServiceMap implements EmployeeMapInterface{
     public Employee addToRepositoryEmployee(String firstname, String lastname) {
         Employee addEmpoyee = new Employee(firstname, lastname);
         String key = firstname + lastname;
-        if (StringUtils.isEmpty(key)) {
+        if (StringUtils.isEmpty(key) || NumberUtils.STANDARD_NUMBER_TYPES.contains(key)
+        ) {
             throw new NullPointerException("error");
         }
         employeesMap.put(key, addEmpoyee);
